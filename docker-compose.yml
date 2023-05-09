@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  pgsql: # docker-compose run pgsql bash
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: symfony_db
+    volumes:
+      - .docker/pgsql/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+    ports:
+      - 5433:5432
+  php: # docker-compose run php bash
+    build: './.docker/php'
+    ports:
+      - "8888:80"
+    tty: true
+    environment:
+      PHP_IDE_CONFIG: "serverName=Symfony-Learning Docker"
+    volumes:
+      - ./:/var/www/html/
+      - ./.docker/php/logs/:/var/log/apache2/
+      - ./.docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./.docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+    depends_on:
+      - pgsql
+  composer: # docker-compose run composer bash
+    build: './.docker/composer'
+    tty: true
+    command: [ "composer", "update" ]
+    volumes:
+      - ./:/app/
+      - ./.docker/composer/tmp/:/tmp/
+    depends_on:
+      - php
