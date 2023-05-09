@@ -1,5 +1,5 @@
 /.idea/
-/.docker/comcomposer/tmp/
+/.docker/composer/tmp/
 /.docker/php/logs/
 
 ###> symfony/framework-bundle ###
