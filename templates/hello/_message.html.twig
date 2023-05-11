@@ -1,0 +1,9 @@
+<div>
+    <p>
+        {% if id is defined %}
+            <a href="{{ path('app_show_message', {'id': id}) }}">{{ message.text }} Created at: {{ message.createdAt|date }}</a>
+        {% else %}
+            <b>{{ message.text }}</b> Created at: {{ message.createdAt|date }}
+        {% endif %}
+    </p>
+</div>

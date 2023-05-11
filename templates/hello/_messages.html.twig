@@ -1,0 +1,9 @@
+{% if messages|length > 0 %}
+    <div>
+        {% for id, message in messages %}
+            {% include 'hello/_message.html.twig' with {'id': id + 1} %}
+        {% endfor %}
+    </div>
+{% else %}
+    <p>There is no messages</p>
+{% endif %}

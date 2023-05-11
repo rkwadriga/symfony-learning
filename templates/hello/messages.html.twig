@@ -1,0 +1,5 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include 'hello/_messages.html.twig' with {'messages': messages|slice(0, limit)} %}
+{%  endblock %}
