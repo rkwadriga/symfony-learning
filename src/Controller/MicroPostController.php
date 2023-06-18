@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use App\Form\MicroPostType;
 use DateTimeImmutable;
 use App\Entity\MicroPost;
 use App\Repository\MicroPostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,10 +33,7 @@ class MicroPostController extends AbstractController
     public function add(Request $request, MicroPostRepository $repository): Response
     {
         $microPost = new MicroPost();
-        $form = $this->createFormBuilder($microPost)
-            ->add('title')
-            ->add('text')
-            ->getForm();
+        $form = $this->createForm(MicroPostType::class, $microPost);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -54,10 +51,7 @@ class MicroPostController extends AbstractController
     public function edit(int $id, Request $request, MicroPostRepository $repository): Response
     {
         $microPost = $repository->find($id);
-        $form = $this->createFormBuilder($microPost)
-            ->add('title')
-            ->add('text')
-            ->getForm();
+        $form = $this->createForm(MicroPostType::class, $microPost);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

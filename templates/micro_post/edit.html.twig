@@ -2,6 +2,8 @@
 
 {% block title %}Update post {{ post.title }}{% endblock %}
 
+{% block bread %} / Edit Post #{{ post.id}} {% endblock %}
+
 {% block body %}
     {{ include('micro_post/_form.html.twig') }}
 {% endblock %}

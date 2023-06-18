@@ -1,15 +1,22 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Post - {{ post.title }}{% endblock %}
-
-{% block body %}
-    <h3>{{ post.title }}</h3>
-    <div>{{ post.text }}</div>
-    <div style="color: grey;">
-        {% if date(post.createdAt) < date('-1 year') %}
-            Older than 1 year
-        {% else %}
-            {{ post.createdAt|date('Y-m-d') }}
-        {% endif %}
+<div class="mb-4">
+    <div class="text-2xl">
+        <a href="{{ path('app_micro_post_show', {id: post.id}) }}">{{ post.title }}</a>
     </div>
-{% endblock %}
+    <div class="text-xl dark:text-gray-400">
+        {{ post.text }}
+    </div>
+    <div class="text-gray-500 dark:text-gray-400">
+        {{ post.createdAt|date('Y-m-d') }}
+    </div>
+    <div>
+        <a href="#">
+            Like <span class="px-2 rounded-md bg-gray-200 dark:bg-gray-700">0</span>
+        </a>
+    </div>
+    <div class="text-sm text-gray-500 dark:text-gray-400">
+        <a href="#">user@mail.com</a>
+    </div>
+    <div>
+        <a href="{{ path('app_micro_post_edit', {id: post.id}) }}">Edit</a>
+    </div>
+</div>
