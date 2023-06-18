@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if post.id %}
+        Update post {{ post.title }}
+    {% else %}
+        Create New Post
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {{ include('micro_post/_form.html.twig') }}
+{% endblock %}

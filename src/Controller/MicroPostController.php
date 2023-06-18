@@ -2,17 +2,52 @@
 
 namespace App\Controller;
 
+use DateTimeImmutable;
+use App\Entity\MicroPost;
+use App\Repository\MicroPostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MicroPostController extends AbstractController
 {
-    #[Route('/micro-post', name: 'app_micro_post')]
-    public function index(): Response
+    #[Route('/micro-posts', name: 'app_micro_posts', methods: Request::METHOD_GET)]
+    public function index(MicroPostRepository $repository): Response
     {
         return $this->render('micro_post/index.html.twig', [
-            'controller_name' => 'MicroPostController',
+            'posts' => $repository->findAll(),
         ]);
+    }
+
+    #[Route('/micro-post/{id<\d+>}', name: 'app_micro_post_show', methods: Request::METHOD_GET)]
+    public function show(int $id, MicroPostRepository $repository): Response
+    {
+        return $this->render('micro_post/show-one.html.twig', [
+            'post' => $repository->find($id),
+        ]);
+    }
+
+    #[Route('/micro-post/add', name: 'app_micro_post_add')]
+    public function add(Request $request, MicroPostRepository $repository): Response
+    {
+        $microPost = new MicroPost();
+        $form = $this->createFormBuilder($microPost)
+            ->add('title')
+            ->add('text')
+            ->add('submit', SubmitType::class, ['label' => 'Save'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $microPost->setCreatedAt(new DateTimeImmutable());
+            $repository->save($microPost, true);
+            $this->addFlash('success', 'The post was created');
+
+            return $this->redirectToRoute('app_micro_posts');
+        }
+
+        return $this->render('micro_post/add.html.twig', ['form' => $form, 'post' => $microPost]);
     }
 }
