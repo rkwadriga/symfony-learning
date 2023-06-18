@@ -39,7 +39,7 @@ class MicroPostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $microPost->setCreatedAt(new DateTimeImmutable());
             $repository->save($microPost, true);
-            $this->addFlash('success', 'The post was created');
+            $this->addFlash('success', 'The new post was successfully created');
 
             return $this->redirectToRoute('app_micro_posts');
         }
@@ -56,7 +56,7 @@ class MicroPostController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $repository->save($microPost, true);
-            $this->addFlash('success', 'The post was updated');
+            $this->addFlash('success', "Post #{$microPost->getId()} successfully updated");
 
             return $this->redirectToRoute('app_micro_posts');
         }
