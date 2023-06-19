@@ -36,9 +36,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: MicroPost::class, mappedBy: 'likedBy')]
     private Collection $likedPosts;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: MicroPost::class, cascade: ['persist', 'remove'])]
+    private Collection $posts;
+
     public function __construct()
     {
         $this->likedPosts = new ArrayCollection();
+        $this->posts = new ArrayCollection();
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->getRoles(), true);
     }
 
     public function getId(): ?int
@@ -150,6 +162,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->likedPosts->removeElement($likedPost)) {
             $likedPost->removeLikedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MicroPost>
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(MicroPost $microPost): static
+    {
+        if (!$this->posts->contains($microPost)) {
+            $this->posts->add($microPost);
+            $microPost->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(MicroPost $microPost): static
+    {
+        if ($this->posts->removeElement($microPost)) {
+            // set the owning side to null (unless already changed)
+            if ($microPost->getOwner() === $this) {
+                $microPost->setOwner(null);
+            }
         }
 
         return $this;

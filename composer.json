@@ -8,6 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^2.10",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.15",
         "sensio/framework-extra-bundle": "^6.2",
@@ -73,6 +74,7 @@
         }
     },
     "require-dev": {
+        "fzaninotto/faker": "^1.5",
         "symfony/maker-bundle": "^1.49",
         "symfony/stopwatch": "6.2.*",
         "symfony/web-profiler-bundle": "6.2.*"
