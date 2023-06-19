@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\MicroPost;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * @extends ServiceEntityRepository<MicroPost>
@@ -37,6 +38,20 @@ class MicroPostRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @return array<MicroPost>
+     */
+    public function findAllWithComments(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->addSelect('c')
+            ->leftJoin('p.comments', 'c')
+            ->addOrderBy('p.created_at', Criteria::DESC)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
 //    /**
