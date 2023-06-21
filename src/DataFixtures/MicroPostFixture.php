@@ -42,6 +42,7 @@ class MicroPostFixture extends Fixture implements DependentFixtureInterface
                     $comment = (new Comment())
                         ->setText($faker->text)
                         ->setCreatedAt(new DateTimeImmutable($faker->dateTimeThisYear->format('Y-m-d H:i:s')))
+                        ->setOwner($users[rand(0, count($users) - 1)])
                     ;
                     $post->addComment($comment);
                 }

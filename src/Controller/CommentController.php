@@ -23,8 +23,11 @@ class CommentController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setPost($microPost);
-            $comment->setCreatedAt(new DateTimeImmutable());
+            $comment
+                ->setPost($microPost)
+                ->setOwner($this->getUser())
+                ->setCreatedAt(new DateTimeImmutable())
+            ;
             $commentRepository->save($comment, true);
             $this->addFlash('success', "The new comment for Post #{$microPost->getId()} was successfully added");
 

@@ -37,7 +37,10 @@ class MicroPostController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $microPost->setCreatedAt(new DateTimeImmutable());
+            $microPost
+                ->setOwner($this->getUser())
+                ->setCreatedAt(new DateTimeImmutable())
+            ;
             $repository->save($microPost, true);
             $this->addFlash('success', 'The new post was successfully created');
 
