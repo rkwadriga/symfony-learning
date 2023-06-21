@@ -32,10 +32,11 @@
             <div class="text-right">
                 <div class="text-sm text-gray-400 dark:text-gray-500">
                     <div>
-                        <a href="{{ path('app_auth_login') }}">Login</a>
-                    </div>
-                    <div>
-                        <a href="{{ path('app_micro_post_add') }}"> Add New Post</a>
+                        {% if app.user %}
+                            <a href="{{ path('app_micro_post_add') }}"> Add New Post</a>
+                        {% else %}
+                            <a href="{{ path('app_auth_login') }}">Login</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

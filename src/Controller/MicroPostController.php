@@ -10,7 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class MicroPostController extends AbstractController
 {
     #[Route('/micro-posts', name: 'app_micro_posts', methods: Request::METHOD_GET)]
