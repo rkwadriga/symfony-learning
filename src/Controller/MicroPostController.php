@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Form\MicroPostType;
-use DateTimeImmutable;
 use App\Entity\MicroPost;
 use App\Repository\MicroPostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,7 +31,10 @@ class MicroPostController extends AbstractController
         ]);
     }
 
-    #[Route('/micro-post/add', name: 'app_micro_post_add')]
+    #[
+        Route('/micro-post/add', name: 'app_micro_post_add'),
+        IsGranted('ROLE_EDITOR')
+    ]
     public function add(Request $request, MicroPostRepository $repository): Response
     {
         $microPost = new MicroPost();
@@ -40,10 +42,7 @@ class MicroPostController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $microPost
-                ->setOwner($this->getUser())
-                ->setCreatedAt(new DateTimeImmutable())
-            ;
+            $microPost->setOwner($this->getUser());
             $repository->save($microPost, true);
             $this->addFlash('success', 'The new post was successfully created');
 
@@ -53,7 +52,10 @@ class MicroPostController extends AbstractController
         return $this->render('micro_post/add.html.twig', ['form' => $form, 'post' => $microPost]);
     }
 
-    #[Route('/micro-post/{id<\d+>}/edit', name: 'app_micro_post_edit')]
+    #[
+        Route('/micro-post/{id<\d+>}/edit', name: 'app_micro_post_edit'),
+        IsGranted('ROLE_EDITOR')
+    ]
     public function edit(int $id, Request $request, MicroPostRepository $repository): Response
     {
         $microPost = $repository->find($id);

@@ -36,16 +36,21 @@ class UserFixture extends Fixture
 
         $admin = (new User())
             ->setEmail('admin.mail.com')
-            ->setRoles(['ROLE_GUEST', 'ROLE_USER', 'ROLE_ADMIN'])
-            ->setCreatedAt(new DateTimeImmutable())
+            ->setRoles(['ROLE_ADMIN'])
             ->setProfile($adminProfile)
         ;
         $admin->setPassword($this->passwordHasher->hashPassword($admin, $password));
         $manager->persist($admin);
 
+        $roles = ['ROLE_USER', 'ROLE_COMMENTER', 'ROLE_EDITOR'];
         for ($i = 0; $i < 11; $i++) {
             $company = $faker->company;
             $webSite = str_replace(' ', '-', str_replace([',', '-'], '', strtolower($company)));
+            if (rand(1, 10) > 7) {
+                $role = $roles[rand(1, count($roles) - 1)];
+            } else {
+                $role = 'ROLE_USER';
+            }
 
             $userProfile = (new UserProfile())
                 ->setName($faker->firstName)
@@ -61,7 +66,7 @@ class UserFixture extends Fixture
 
             $user = (new User())
                 ->setEmail($faker->email)
-                ->setRoles(['ROLE_GUEST', 'ROLE_USER'])
+                ->setRoles([$role])
                 ->setCreatedAt(new DateTimeImmutable($faker->dateTimeThisMonth->format('Y-m-d H:i:s')))
                 ->setProfile($userProfile)
             ;

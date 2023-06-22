@@ -15,7 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
-    name: 'app:create-user',
+    name: 'app:user:create',
     description: 'Create a user',
 )]
 class CreateUserCommand extends AbstractCommand
@@ -63,7 +63,6 @@ class CreateUserCommand extends AbstractCommand
         $user = (new User())
             ->setEmail($input->getOption('email'))
             ->setRoles($input->getOption('role'))
-            ->setCreatedAt(new DateTimeImmutable())
             ->setProfile($profile)
         ;
         $user->setPassword($this->passwordHasher->hashPassword($user, $input->getOption('password')));
@@ -85,17 +84,12 @@ class CreateUserCommand extends AbstractCommand
         }
 
         $role = $input->getOption('role');
-        if (!in_array($role, ['ROLE_GUEST', 'ROLE_USER', 'ROLE_ADMIN'])) {
+        if (!in_array($role, ['ROLE_USER', 'ROLE_COMMENTER', 'ROLE_EDITOR', 'ROLE_ADMIN'])) {
             $io->error('Invalid role value');
 
             return false;
         }
-        $roles = ['ROLE_GUEST'];
-        if ($role === 'ROLE_ADMIN') {
-            $roles[] = 'ROLE_USER';
-        }
-        $roles[] = $role;
-        $input->setOption('role', $roles);
+        $input->setOption('role', [$role]);
 
         $password = $input->getOption('password');
         if (strlen($password < 4)) {

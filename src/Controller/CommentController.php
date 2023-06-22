@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\CommentRepository;
-use DateTimeImmutable;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Repository\MicroPostRepository;
@@ -17,7 +16,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class CommentController extends AbstractController
 {
-    #[Route('/micro-post/{postID<\d+>}/comment/add', name: 'app_comment_add')]
+    #[
+        Route('/micro-post/{postID<\d+>}/comment/add', name: 'app_comment_add'),
+        IsGranted('ROLE_COMMENTER')
+    ]
     public function index(int $postID, Request $request, MicroPostRepository $postRepository, CommentRepository $commentRepository): Response
     {
         $microPost = $postRepository->find($postID);
@@ -29,7 +31,6 @@ class CommentController extends AbstractController
             $comment
                 ->setPost($microPost)
                 ->setOwner($this->getUser())
-                ->setCreatedAt(new DateTimeImmutable())
             ;
             $commentRepository->save($comment, true);
             $this->addFlash('success', "The new comment for Post #{$microPost->getId()} was successfully added");
