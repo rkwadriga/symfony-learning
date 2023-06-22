@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Security\Voter\MicroPostVoter;
 
 #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class MicroPostController extends AbstractController
@@ -19,15 +20,18 @@ class MicroPostController extends AbstractController
     public function index(MicroPostRepository $repository): Response
     {
         return $this->render('micro_post/index.html.twig', [
-            'posts' => $repository->findAllWithComments(),
+            'posts' => $repository->findAllWithCommentsAndUsers(),
         ]);
     }
 
-    #[Route('/micro-post/{id<\d+>}', name: 'app_micro_post_show', methods: Request::METHOD_GET)]
-    public function show(int $id, MicroPostRepository $repository): Response
+    #[
+        Route('/micro-post/{post<\d+>}', name: 'app_micro_post_show', methods: Request::METHOD_GET),
+        IsGranted(MicroPostVoter::VIEW, 'post')
+    ]
+    public function show(MicroPost $post): Response
     {
         return $this->render('micro_post/show-one.html.twig', [
-            'post' => $repository->find($id),
+            'post' => $post,
         ]);
     }
 
@@ -53,22 +57,21 @@ class MicroPostController extends AbstractController
     }
 
     #[
-        Route('/micro-post/{id<\d+>}/edit', name: 'app_micro_post_edit'),
-        IsGranted('ROLE_EDITOR')
+        Route('/micro-post/{post<\d+>}/edit', name: 'app_micro_post_edit'),
+        IsGranted(MicroPostVoter::EDIT, 'post')
     ]
-    public function edit(int $id, Request $request, MicroPostRepository $repository): Response
+    public function edit(MicroPost $post, Request $request, MicroPostRepository $repository): Response
     {
-        $microPost = $repository->find($id);
-        $form = $this->createForm(MicroPostType::class, $microPost);
+        $form = $this->createForm(MicroPostType::class, $post);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $repository->save($microPost, true);
-            $this->addFlash('success', "Post #{$microPost->getId()} successfully updated");
+            $repository->save($post, true);
+            $this->addFlash('success', "Post #{$post->getId()} successfully updated");
 
             return $this->redirectToRoute('app_micro_posts');
         }
 
-        return $this->render('micro_post/edit.html.twig', ['form' => $form, 'post' => $microPost]);
+        return $this->render('micro_post/edit.html.twig', ['form' => $form, 'post' => $post]);
     }
 }

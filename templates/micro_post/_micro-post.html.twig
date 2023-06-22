@@ -1,6 +1,6 @@
 <div class="mb-4">
     <div class="text-2xl">
-        <a href="{{ path('app_micro_post_show', {id: post.id}) }}">{{ post.title }}</a>
+        <a href="{{ path('app_micro_post_show', {post: post.id}) }}">{{ post.title }}</a>
     </div>
     <div class="text-xl dark:text-gray-400">
         {{ post.text }}
@@ -17,8 +17,8 @@
         <a href="#">{{ post.owner.email }}</a>
     </div>
     <div class="flex">
-        <a href="{{ path('app_micro_post_edit', {id: post.id}) }}" class="mr-2">Edit</a>
-        <a href="{{ path('app_comment_add', {postID: post.id}) }}">
+        <a href="{{ path('app_micro_post_edit', {post: post.id}) }}" class="mr-2">Edit</a>
+        <a href="{{ path('app_comment_add', {post: post.id}) }}">
             Comment <span class="px-2 rounded-md bg-gray-200 dark:bg-gray-700">{{ post.comments.count }}</span>
         </a>
     </div>

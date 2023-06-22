@@ -3,7 +3,7 @@
 {% block title %}Create New Comment{% endblock %}
 
 {% block bread %}
-    / <a href="{{ path('app_micro_post_show', {id: post.id}) }}">Post #{{ post.id }}</a>
+    / <a href="{{ path('app_micro_post_show', {post: post.id}) }}">Post #{{ post.id }}</a>
     / Crate a New Comment
 {% endblock %}
 
