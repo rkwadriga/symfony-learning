@@ -42,6 +42,9 @@
                         <div>
                             <a href="{{ path('app_auth_login') }}">Login</a>
                         </div>
+                        <div>
+                            <a href="{{ path('app_register') }}">Registration</a>
+                        </div>
                     {% endif %}
                 </div>
             </div>
@@ -51,6 +54,11 @@
             {% for message in app.flashes('success') %}
                 <div class="rounded-md p-2 border-green-300 bg-green-50 border dark:border-green-600 dark:bg-green-700 dark:text-white md-4 mb-3">
                     {{ message }}
+                </div>
+            {% endfor %}
+            {% for error in app.flashes('error') %}
+                <div class="rounded-md p-2 border-red-300 bg-red-50 border dark:border-red-600 dark:bg-red-700 dark:text-white md-4 mb-3">
+                    {{ error }}
                 </div>
             {% endfor %}
             {% block body %}{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registration{% endblock %}
+
+{% block bread %} / Registration{% endblock %}
+
+{% block body %}
+    {{ include('registration/_form.html.twig') }}
+
+    <div class="mt-2 text-center text-gray-600 dark:text-gray-400">
+        Already have an account? <a href="{{ path('app_auth_login') }}">Login</a>
+    </div>
+{% endblock %}
