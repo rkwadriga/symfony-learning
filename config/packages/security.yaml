@@ -16,6 +16,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            user_checker: App\Security\UserChecker
             form_login:
                 login_path: app_auth_login
                 check_path: app_auth_login
@@ -36,9 +37,10 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
 
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_EDITOR]
-        ROLE_EDITOR: [ROLE_COMMENTER]
         ROLE_COMMENTER: [ROLE_USER]
+        ROLE_WRITER: [ROLE_COMMENTER]
+        ROLE_EDITOR: [ROLE_WRITER]
+        ROLE_ADMIN: [ROLE_EDITOR]
 when@test:
     security:
         password_hashers:

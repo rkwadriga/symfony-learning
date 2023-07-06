@@ -35,7 +35,7 @@ services:
       - ./.docker/composer/tmp/:/tmp/
     depends_on:
       - php
-  mailer:
+  mailer: # http://0.0.0.0:1080
     build: './.docker/mailer'
     ports:
       - 1080:1080
