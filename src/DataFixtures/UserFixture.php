@@ -42,14 +42,12 @@ class UserFixture extends Fixture
         $admin->setPassword($this->passwordHasher->hashPassword($admin, $password));
         $manager->persist($admin);
 
-        $roles = ['ROLE_USER', 'ROLE_COMMENTER', 'ROLE_EDITOR'];
+        $roles = ['ROLE_COMMENTER', 'ROLE_EDITOR'];
         for ($i = 0; $i < 11; $i++) {
             $company = $faker->company;
             $webSite = str_replace(' ', '-', str_replace([',', '-'], '', strtolower($company)));
             if (rand(1, 10) > 7) {
-                $role = $roles[rand(1, count($roles) - 1)];
-            } else {
-                $role = 'ROLE_USER';
+                $role = $roles[rand(0, count($roles) - 1)];
             }
 
             $userProfile = (new UserProfile())
