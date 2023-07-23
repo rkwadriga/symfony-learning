@@ -30,19 +30,22 @@
             </div>
 
             <div class="text-right">
-                <div class="text-sm text-gray-400 dark:text-gray-500">
+                <div class="text-sm text-gray-500 dark:text-gray-400 flex">
                     {% if app.user %}
                         <div>
                             <a href="{{ path('app_micro_post_add') }}"> Add New Post</a>
                         </div>
-                        <div>
+                        <div class="ml-2">
+                            <a href="{{ path('app_user_profile') }}">My Profile</a>
+                        </div>
+                        <div class="ml-2">
                             <a href="{{ path('app_auth_logout') }}">Logout</a>
                         </div>
                     {% else %}
                         <div>
                             <a href="{{ path('app_auth_login') }}">Login</a>
                         </div>
-                        <div>
+                        <div class="ml-2">
                             <a href="{{ path('app_register') }}">Registration</a>
                         </div>
                     {% endif %}

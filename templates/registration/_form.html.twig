@@ -1,4 +1,12 @@
 {{ form_start(form) }}
+    <div class="border-b border-gray-300 dark:border-gray-100 mt-4"></div>
+    <div class="text-xl mt-1">
+        Basic Information
+    </div>
+    <div class="text-gray-500 dark:text-gray-300 border-gray-300 dark:border-gray-100 mb-1 pb-2">
+        Enter your credentials
+    </div>
+
     <div>
         {{ form_label(form.email, null, {
             label_attr: {
@@ -43,8 +51,6 @@
         </div>
     </div>
 
-
-
     <div class="flex items-center mt-4 mb-4">
         {{ form_widget(form.agreeTerms, {
             attr: {
@@ -57,6 +63,16 @@
             }
         }) }}
     </div>
+
+    <div class="border-b border-gray-300 dark:border-gray-100 mt-4"></div>
+    <div class="text-xl mt-1">
+        Profile
+    </div>
+    <div class="text-gray-500 dark:text-gray-300 border-gray-300 dark:border-gray-100 mb-1 pb-2">
+        Enter more details about yourself. (You can do it later)
+    </div>
+
+    {{ include('user_profile/_form.html.twig', {form: form.profile}) }}
 
     <button type="submit" class="block w-full shadow-sm border-transparent bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white rounded-md border p-2 mt-4 mb-2">Register</button>
 {{ form_end(form) }}
