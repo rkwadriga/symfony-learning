@@ -20,6 +20,7 @@ security:
             form_login:
                 login_path: app_auth_login
                 check_path: app_auth_login
+                target_path_parameter: redirect_url
             logout:
                 path: app_auth_logout
                 target: app_auth_login
